@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shareable Resume</title>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="shortcut icon" href="./favicon.png" type="image/x-icon" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <!-- Main form for the resume -->
+  <form id="resumeForm" class="resume-share">
+    <h1>Shareable Resume by Alishba Naseem</h1>
+
+    <!-- Personal Information Section -->
+    <fieldset>
+      <legend>Personal Information</legend>
+      <label for="name">Name:</label>
+      <input type="text" id="name" required />
+      <br />
+      <label for="email">Email:</label>
+      <input type="text" id="email" required />
+      <br />
+    </fieldset>
+
+    <!-- Education Section -->
+    <fieldset>
+      <legend>Education</legend>
+      <label for="degree">Degree:</label>
+      <br />
+      <input id="degree" type="text" required />
+      <br />
+      <label for="schl/uni">School/ University:</label>
+      <br />
+      <input id="schl/uni" type="text" required />
+      <br />
+      <label for="Year">Year:</label>
+      <br />
+      <input id="Year" type="text" required />
+    </fieldset>
+
+    <!-- Experience Section -->
+    <fieldset>
+      <legend>Experience</legend>
+      <label for="office-name">Office name:</label>
+      <br />
+      <input id="office-name" type="text" required />
+      <br />
+      <label for="job-title">Job Title:</label>
+      <br />
+      <input id="job-title" type="text" required />
+      <br />
+      <label for="Year-Experience">Year of Experience:</label>
+      <br />
+      <input id="Year-Experience" type="text" required />
+    </fieldset>
+
+    <!-- Skills Section -->
+    <fieldset>
+      <legend>Skills</legend>
+      <label for="skills">Skills:</label>
+      <br />
+      <input id="skills" type="text" required />
+    </fieldset>
+
+    <!-- Buttons and Output Section -->
+    <button class="generate" type="submit">Generate Resume</button>
+
+    <!-- Placeholder for the generated resume -->
+    <div id="resumeOutput" class="resume-preview"></div>
+
+    <button type="button" id="resume-share">Share link</button>
+    <br />
+    <button type="button" id="pdf-download">PDF download</button>
+
+    <!-- Footer -->
+    <footer>
+      <div>
+        <span>Copyright</span>
+        <hr />
+        <p>@Alishba Naseem</p>
+      </div>
+    </footer>
+  </form>
+  <!-- Link to your TypeScript file compiled to JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
