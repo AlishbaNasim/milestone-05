@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,11 +35,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
+var jspdf_1 = require("jspdf");
 // Simulate a database using an in-memory object
 var database = {};
-// Function to generate a unique URL for the resume based on the username
+//Function to generate a unique URL for the resume based on the username
 function generateResumeURL(username) {
-    return "".concat(username, ".vercel.app/resume");
+    return "resume/".concat(username.replace(/\s*/g, '_'), ".vercel.app/resume");
 }
 // Function to save resume data in the simulated database
 function saveResume(username, content) {
@@ -57,7 +60,7 @@ function handleFormSubmit(event) {
     var username = document.getElementById('name').value;
     var email = document.getElementById('email').value;
     var degree = document.getElementById('degree').value;
-    var schoolUni = document.getElementById('schl/uni').value;
+    var schoolUni = document.getElementById('schl_uni').value;
     var year = document.getElementById('Year').value;
     var officeName = document.getElementById('office-name').value;
     var jobTitle = document.getElementById('job-title').value;
@@ -87,10 +90,9 @@ function handleFormSubmit(event) {
 // Event handler for downloading the resume as a PDF
 function handlePDFDownload() {
     return __awaiter(this, void 0, void 0, function () {
-        var jsPDF, doc, resumeContent;
+        var doc, resumeContent;
         return __generator(this, function (_a) {
-            jsPDF = window.jspdf.jsPDF;
-            doc = new jsPDF();
+            doc = new jspdf_1.jsPDF();
             resumeContent = document.getElementById('resumeOutput').innerText;
             // Add resume content to the PDF
             doc.text(resumeContent, 10, 10);
@@ -101,7 +103,7 @@ function handlePDFDownload() {
     });
 }
 // Add event listeners to form and buttons
-var form = document.getElementById('resumeForm');
+var form = document.getElementById("resume-form");
 var shareButton = document.getElementById('resume-share');
 var downloadButton = document.getElementById('pdf-download');
 if (form) {
