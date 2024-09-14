@@ -80,7 +80,7 @@ body {
   }
   
   /* Styling for the generated resume preview area */
-  .resume-preview {
+  .resume-content {
     border: 1px dashed #e4bb07;
     padding: 10px;
     min-height: 100px;

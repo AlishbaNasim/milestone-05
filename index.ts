@@ -1,122 +1,122 @@
-import { jsPDF } from 'jspdf';
-// Interface to define the structure of resume data
+// manually declare html2pdf as any 
+declare var html2pdf: any;
+
+// Interface for the resume data
 interface ResumeData {
-    username: string;
-    content: string; // Resume content in a string format
-  }
-  
-  // Simulate a database using an in-memory object
-  const database: Record<string, ResumeData> = {};
-  
-  //Function to generate a unique URL for the resume based on the username
-  function generateResumeURL(username: string): string {
-    return `resume/${username.replace(/\s*/g,'_')}.vercel.app/resume`;
-  }
-  
-  // Function to save resume data in the simulated database
-  function saveResume(username: string, content: string): void {
-    const url = generateResumeURL(username);
-    database[username] = { username, content };
-    console.log(`Resume saved at: ${url}`);
-  }
-  
-  // Function to retrieve resume data from the simulated database
-  function getResume(username: string): ResumeData | undefined {
-    return database[username];
-  }
-  
-  // Event handler for generating and displaying the resume
-  function handleFormSubmit(event: Event): void {
-    event.preventDefault(); // Prevent the default form submission behavior
-  
-    // Retrieve form values
-    const username = (document.getElementById('name') as HTMLInputElement).value;
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const degree = (document.getElementById('degree') as HTMLInputElement).value;
-    const schoolUni = (document.getElementById('schl_uni') as HTMLInputElement).value;
-    const year = (document.getElementById('Year') as HTMLInputElement).value;
-    const officeName = (document.getElementById('office-name') as HTMLInputElement).value;
-    const jobTitle = (document.getElementById('job-title') as HTMLInputElement).value;
-    const yearExperience = (document.getElementById('Year-Experience') as HTMLInputElement).value;
-    const skills = (document.getElementById('skills') as HTMLInputElement).value;
-  
-    // Create resume content as an HTML string
-    const resumeContent = `
-      <h2>Resume</h2>
-      <p><strong>Name:</strong> ${username}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Degree:</strong> ${degree}</p>
-      <p><strong>School/University:</strong> ${schoolUni}</p>
-      <p><strong>Year:</strong> ${year}</p>
-      <p><strong>Office Name:</strong> ${officeName}</p>
-      <p><strong>Job Title:</strong> ${jobTitle}</p>
-      <p><strong>Year of Experience:</strong> ${yearExperience}</p>
-      <p><strong>Skills:</strong> ${skills}</p>
-    `;
-  
-    // Display resume content in the preview area
-    const resumeOutput = document.getElementById('resumeOutput');
-    if (resumeOutput) {
-      resumeOutput.innerHTML = resumeContent;
-    } else {
-      console.error('Resume output element not found.');
-    }
-  
-    // Save resume data
-    saveResume(username, resumeContent);
-  
-    // Update the share link button with the generated URL
-    const shareLink = document.getElementById('resume-share') as HTMLButtonElement;
-    if (shareLink) {
-      shareLink.setAttribute('data-url', generateResumeURL(username));
-    } else {
-      console.error('Share link button not found.');
-    }
-  }
-  
-  // Event handler for downloading the resume as a PDF
-  async function handlePDFDownload(): Promise<void> {
-    // Import jsPDF from the jsPDF library
-    // const{ jsPDF} =(global as any).jspdf.jsPDF
-    const doc = new jsPDF();
-  
-    // Get resume content from the preview area
-    const resumeContent = (document.getElementById('resumeOutput') as HTMLElement).innerText;
-  
-    // Add resume content to the PDF
-    doc.text(resumeContent, 10, 10);
-    
-    // Save the PDF
-    doc.save('resume.pdf');
-  }
-  
-  // Add event listeners to form and buttons
-  const form = document.getElementById("resume-form");
-  const shareButton = document.getElementById('resume-share');
-  const downloadButton = document.getElementById('pdf-download');
-  
-  if (form) {
-    form.addEventListener('submit', handleFormSubmit);
+  username: string;
+  email: string;
+  degree: string;
+  schoolUni: string;
+  year: string;
+  officeName: string;
+  jobTitle: string;
+  yearExperience: string;
+  skills: string;
+}
+
+// Function to generate resume content dynamically
+function generateResumeContent(data: ResumeData): string {
+  return `
+    <h2>Resume</h2>
+    <p><strong>Name:</strong> ${data.username}</p>
+    <p><strong>Email:</strong> ${data.email}</p>
+    <p><strong>Degree:</strong> ${data.degree}</p>
+    <p><strong>School/University:</strong> ${data.schoolUni}</p>
+    <p><strong>Year:</strong> ${data.year}</p>
+    <p><strong>Office Name:</strong> ${data.officeName}</p>
+    <p><strong>Job Title:</strong> ${data.jobTitle}</p>
+    <p><strong>Year of Experience:</strong> ${data.yearExperience}</p>
+    <p><strong>Skills:</strong> ${data.skills}</p>
+  `;
+}
+
+// Function to handle form submission and generate resume
+function handleFormSubmit(event: Event): void {
+  event.preventDefault();
+
+  // Get form values
+  const username = (document.getElementById('name') as HTMLInputElement).value;
+  const email = (document.getElementById('email') as HTMLInputElement).value;
+  const degree = (document.getElementById('degree') as HTMLInputElement).value;
+  const schoolUni = (document.getElementById('schl_uni') as HTMLInputElement).value;
+  const year = (document.getElementById('Year') as HTMLInputElement).value;
+  const officeName = (document.getElementById('office-name') as HTMLInputElement).value;
+  const jobTitle = (document.getElementById('job-title') as HTMLInputElement).value;
+  const yearExperience = (document.getElementById('Year-Experience') as HTMLInputElement).value;
+  const skills = (document.getElementById('skills') as HTMLInputElement).value;
+
+  // Create resume data object
+  const resumeData: ResumeData = {
+    username,
+    email,
+    degree,
+    schoolUni,
+    year,
+    officeName,
+    jobTitle,
+    yearExperience,
+    skills,
+  };
+
+  // Generate resume content and display it
+  const resumeContent = generateResumeContent(resumeData);
+  const resumeOutput = document.getElementById('resume-content');
+  if (resumeOutput) {
+    resumeOutput.innerHTML = resumeContent;
   } else {
-    console.error('Resume form not found.');
+    console.error('Resume output element not found.');
   }
-  
-  if (shareButton) {
-    shareButton.addEventListener('click', (event) => {
-      const button = event.currentTarget as HTMLButtonElement;
-      const url = button.getAttribute('data-url');
-      if (url) {
-        // Open the shareable resume URL in a new tab
-        window.open(url, '_blank');
-      }
+
+  // Save a shareable link
+  const shareLink = document.getElementById('shareable-link') as HTMLAnchorElement;
+  if (shareLink) {
+    const url = generateResumeURL(username);
+    shareLink.href = url;
+    shareLink.style.display = 'inline-block'; // Show the shareable link
+  } else {
+    console.error('Share link not found.');
+  }
+}
+
+// Function to generate a unique URL for the resume (simulated)
+function generateResumeURL(username: string): string {
+  return `https://resume.vercel.app/${username.replace(/\s+/g, '_')}`;
+}
+
+// Function to handle copying the shareable link
+function handleCopyLink(): void {
+  const shareLink = document.getElementById('shareable-link') as HTMLAnchorElement;
+  if (shareLink && shareLink.href) {
+    navigator.clipboard.writeText(shareLink.href).then(() => {
+      alert(`Link copied to clipboard: ${shareLink.href}`);
+    }).catch(err => {
+      console.error('Error copying link:', err);
     });
   } else {
-    console.error('Share button not found.');
+    console.error('Share link not available for copying.');
   }
-  
-  if (downloadButton) {
-    downloadButton.addEventListener('click', handlePDFDownload);
+}
+
+// Function to download the resume as a PDF using html2pdf.js
+function handlePDFDownload(): void {
+  const resumeContent = document.getElementById('resume-content') as HTMLElement;
+
+  if (resumeContent) {
+    const opt = {
+      margin: 1,
+      filename: 'resume.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+
+    html2pdf().from(resumeContent).set(opt).save();
   } else {
-    console.error('Download button not found.');
+    console.error('Resume content not found.');
   }
-  
+}
+
+// Add event listeners for buttons
+document.getElementById('generate')?.addEventListener('click', handleFormSubmit);
+document.getElementById('copy-link-btn')?.addEventListener('click', handleCopyLink);
+document.getElementById('pdf-download')?.addEventListener('click', handlePDFDownload);
